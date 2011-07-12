@@ -1,0 +1,7 @@
+source :gemcutter
+
+gem 'activerecord'
+gem 'rspec'
+gem 'sqlite3-ruby'
+gem 'jeweler'
+
