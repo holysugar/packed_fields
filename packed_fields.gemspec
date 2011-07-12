@@ -18,12 +18,14 @@ Gem::Specification.new do |s|
   s.files = [
     ".rspec",
     "Gemfile",
+    "Gemfile.lock",
     "MIT-LICENSE",
     "README.markdown",
     "Rakefile",
     "VERSION",
     "lib/active_record/packed_fields.rb",
     "lib/packed_fields.rb",
+    "packed_fields.gemspec",
     "spec/active_record/packed_fields_spec.rb",
     "spec/spec_helper.rb"
   ]
