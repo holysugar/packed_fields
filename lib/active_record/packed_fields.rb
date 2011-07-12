@@ -5,8 +5,10 @@ module ActiveRecord
       def packed(options)
         column = options[:column] || :packed
         fields = options[:fields]
+        validation = options[:validation]
 
         serialize column, Hash
+        
 
         fields.each do |field|
           define_method(field) { 
@@ -23,8 +25,11 @@ module ActiveRecord
               write_attribute(column, { field => value })
             end
           }
+
+          validates field, validation.dup if validation
         end
       end
+
     end
 
     def self.included(base)

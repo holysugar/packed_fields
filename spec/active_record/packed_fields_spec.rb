@@ -4,7 +4,7 @@ require 'packed_fields'
 class ModelWithPacked < ActiveRecord::Base
   set_table_name 'mixins'
 
-  packed :fields => [:foo, :bar]
+  packed :fields => [:foo, :bar], :validation => { :length => { :within => 0..5, :allow_nil => true } }
 end
 
 class CanSetColumnName < ActiveRecord::Base
@@ -20,15 +20,21 @@ describe ModelWithPacked do
 
   let(:model) { ModelWithPacked.new }
 
-  describe "setting foo 'blah' and bar 1" do
+  describe "blank model" do
+
+    its(:foo) { should be_nil }
+    its(:bar) { should be_nil }
+    it { should be_valid }
+
+  end
+
+  describe "setting foo 'blah'" do
     subject {
       model.foo = "blah"
-      model.bar = 1
       model.save
       model.reload
     }
     its(:foo) { should eq 'blah' }
-    its(:bar) { should eq 1 }
 
     it "packed[:foo] should == 'blah'" do
       subject.packed[:foo].should eq 'blah'
@@ -39,6 +45,15 @@ describe ModelWithPacked do
     expect { model.foo = "blah" ; model.save }.to change { model.packed }
   end
 
+  describe "validation" do
+    describe "for example, validates length and bar is too long string" do
+      subject { model.bar = 'toolongstring'; model.valid?; model }
+      it { should be_invalid }
+      it "errors[:bar] exists" do
+        subject.errors[:bar].should be
+      end
+    end
+  end
 
 end
 
